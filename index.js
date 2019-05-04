@@ -16,20 +16,19 @@ var authOptions = {
   json: true
 };
 
-console.log(Buffer.from(client_id + ':' + client_secret).toString('base64'))
-
 request.post(authOptions, function(error, response, body) {
   if (!error && response.statusCode === 200) {
 
     // use the access token to access the Spotify Web API
     var token = body.access_token;
     var options = {
-      url: 'https://api.spotify.com/v1/users/florian.egerndorfer/following',
+      url: 'https://api.spotify.com/v1/users/',
       headers: {
         'Authorization': 'Bearer ' + token
       },
       json: true
     };
+    
     request.get(options, function(error, response, body) {
       console.log(body);
     });
