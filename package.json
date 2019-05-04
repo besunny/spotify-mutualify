@@ -1,0 +1,15 @@
+{
+  "name": "spotify-mutualify",
+  "version": "1.0.0",
+  "description": "This will find mutual songs of two users",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sanaz",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
