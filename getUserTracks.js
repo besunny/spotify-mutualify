@@ -29,6 +29,20 @@ function getAPIToken(onReady) {
     });
 }
 
+function getAPIData(URL, onload) {
+    var options = {
+        url: URL,
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        json: true
+    };
+
+    request.get(options, function (error, response, body) {
+        onload(body);
+    });
+}
+
 //   var options = {
 //     url: 'https://api.spotify.com/v1/users/22eobfnzs5lajea4hasm2irsa/playlists',
 //     headers: {
@@ -54,6 +68,31 @@ function getAPIToken(onReady) {
 //   });
 
 
+function getUserPlaylists(userId) {
+    getAPIData('https://api.spotify.com/v1/users/'+userId+'/playlists', function(data) {
+        console.log(data.items);
+
+        if (data.next) {
+            getAPIData(data.next, function(data) {
+                console.log(data.items);
+
+                if (data.next) {
+                    getAPIData(data.next, function(data) {
+                        console.log(data.items);
+                        
+                        if (data.next) {
+                            getAPIData(data.next, function(data) {
+                                console.log(data.items);
+                                
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+}
+
 function getUserTracks(userId) {
     if (token === undefined) {
         getAPIToken(function () {
@@ -63,19 +102,9 @@ function getUserTracks(userId) {
         return;
     }
 
-    var options = {
-        url: 'https://api.spotify.com/v1/playlists/0pHmFQPprB8seaBEVYxUiE/tracks?limit=100',
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        json: true
-    };
-
-    request.get(options, function (error, response, body) {
-        console.log(body);
-    });
+    getUserPlaylists(userId);
 }
 
-getUserTracks();
+getUserTracks('22eobfnzs5lajea4hasm2irsa');
 
 // https://api.spotify.com/v1/users/{user_id}/playlists
