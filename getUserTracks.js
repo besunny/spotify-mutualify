@@ -24,24 +24,38 @@ function getAPIToken(onReady) {
 
             // use the access token to access the Spotify Web API
             token = body.access_token;
-            onReady();
+            onReady(token);
         }
     });
 }
 
-function getAPIData(URL, onload) {
-    var options = {
-        url: URL,
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        json: true
-    };
-
-    request.get(options, function (error, response, body) {
-        onload(body);
-    });
+function getURLData(URL, callback) {
+  var options = {
+    url: URL,
+    headers: {
+      'Authorization': 'Bearer ' + token
+    },
+    json: true
+  };
+  
+  request.get(options, function(error,response, body) {
+      callback(body);
+  })
 }
+
+getAPIToken(function () {
+    getURLData('https://api.spotify.com/v1/users/22eobfnzs5lajea4hasm2irsa/playlists', function(tracks) {
+        console.log(tracks);
+    })
+});
+
+
+
+
+
+
+
+
 
 //   var options = {
 //     url: 'https://api.spotify.com/v1/users/22eobfnzs5lajea4hasm2irsa/playlists',
@@ -69,42 +83,21 @@ function getAPIData(URL, onload) {
 
 
 function getUserPlaylists(userId) {
-    getAPIData('https://api.spotify.com/v1/users/'+userId+'/playlists', function(data) {
-        console.log(data.items);
-
-        if (data.next) {
-            getAPIData(data.next, function(data) {
-                console.log(data.items);
-
-                if (data.next) {
-                    getAPIData(data.next, function(data) {
-                        console.log(data.items);
-                        
-                        if (data.next) {
-                            getAPIData(data.next, function(data) {
-                                console.log(data.items);
-                                
-                            })
-                        }
-                    })
-                }
-            })
-        }
-    })
+   
 }
 
-function getUserTracks(userId) {
-    if (token === undefined) {
-        getAPIToken(function () {
-            getUserTracks(userId)
-        });
+// function getUserTracks(userId) {
+//     if (token === undefined) {
+//         getAPIToken(function () {
+//             getUserTracks(userId)
+//         });
 
-        return;
-    }
+//         return;
+//     }
 
-    getUserPlaylists(userId);
-}
 
-getUserTracks('22eobfnzs5lajea4hasm2irsa');
 
-// https://api.spotify.com/v1/users/{user_id}/playlists
+//     // getUserPlaylists(userId);
+// }
+
+// getUserTracks('22eobfnzs5lajea4hasm2irsa');
