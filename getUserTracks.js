@@ -1,10 +1,10 @@
 var request = require('request');
 var utils = require('./utils/removeDuplicateTracks');
+
+
 var client_id = 'f278f9f61bf040938b377d340f15a4ff'; // Your client id
 var client_secret = 'ac3feb0162524ba4ade6622cc996488f'; // Your secret
 var token;
-
-
 
 function getAPIToken(onReady) {
     // your application requests authorization
@@ -43,16 +43,6 @@ function getURLData(URL, callback) {
   })
 }
 
-getAPIToken(function () {
-    getAllPages('https://api.spotify.com/v1/users/lilayas/playlists', function ( allplaylists ) {
-     getAllTracks( allplaylists, function(tracks) {
-         console.log(tracks.length)
-         tracks = utils.removeDuplicateTracks(tracks);
-         console.log(tracks.length);
-     } );
-     });
-});
-
 function getAllPages(URL, callback, allPages = []) {
     getURLData(URL, function(pageData) {
         allPages = allPages.concat(pageData.items);
@@ -78,49 +68,30 @@ function getAllTracks(playlists, callback, allTracks = [], index = 0) {
     })
 }
 
+// getAPIToken(function () {
+//     getAllPages('https://api.spotify.com/v1/users/22eobfnzs5lajea4hasm2irsa/playlists', function ( allplaylists ) {
+//      getAllTracks( allplaylists, function(tracks) {
+//          console.log(tracks.length)
+//          tracks = utils.removeDuplicateTracks(tracks);
+//          console.log(tracks.length);
+//      } );
+//      });
+// });
 
+function getUserTracks(userId, callback) {
+    if (token === undefined) {
+        getAPIToken(function () {
+            getUserTracks(userId, callback);
+        });
+        return;
+    }
 
-//   var options = {
-//     url: 'https://api.spotify.com/v1/users/22eobfnzs5lajea4hasm2irsa/playlists',
-//     headers: {
-//       'Authorization': 'Bearer ' + token
-//     },
-//     json: true
-//   };
-
-//   request.get(options, function(error, response, body) {
-//     console.log(body);
-//   });
-
-//   var options = {
-//     url: 'https://api.spotify.com/v1/playlists/0pHmFQPprB8seaBEVYxUiE/tracks?limit=100',
-//     headers: {
-//       'Authorization': 'Bearer ' + token
-//     },
-//     json: true
-//   };
-
-//   request.get(options, function(error, response, body) {
-//     console.log(body);
-//   });
-
-
-function getUserPlaylists(userId) {
-   
+    getAllPages('https://api.spotify.com/v1/users/'+userId+'/playlists', function( allplaylists ) {
+        getAllTracks( allplaylists, function(tracks) {
+            tracks = utils.removeDuplicateTracks(tracks);
+            callback(tracks); 
+        } );
+    });
 }
 
-// function getUserTracks(userId) {
-//     if (token === undefined) {
-//         getAPIToken(function () {
-//             getUserTracks(userId)
-//         });
-
-//         return;
-//     }
-
-
-
-//     // getUserPlaylists(userId);
-// }
-
-// getUserTracks('22eobfnzs5lajea4hasm2irsa');
+exports.get = getUserTracks;

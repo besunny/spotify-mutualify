@@ -15,3 +15,5 @@ function getUserId(profileAddress) {
 
     return userId;
 }
+
+exports.get = getUserId;
