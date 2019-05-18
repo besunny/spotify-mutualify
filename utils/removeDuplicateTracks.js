@@ -1,6 +1,6 @@
-const seenTracks = [];
-
 exports.removeDuplicateTracks = function(tracks) {
+    const seenTracks = [];
+    
     const filteredTracks = tracks.filter(function(track) { 
         if (seenTracks.includes(track.track.id)) {
             return false;
