@@ -61,5 +61,5 @@ function findSimilarTracks(userProfile1, userProfile2) {
 
 findSimilarTracks(
   "https://open.spotify.com/user/22eobfnzs5lajea4hasm2irsa?si=vKsIB_B-QlyB2Tgnu1Z7mA",
-  "https://open.spotify.com/user/meliad_?si=jM-AKrzPQYGsAGuPb1eYBg"
+  "https://open.spotify.com/user/meliad_/playlist/1d5RoA7DW18EMZ3BSRzFb1?si=368FKrA2RXGZb2W7jhCBGQ"
 );
