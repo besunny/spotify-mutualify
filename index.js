@@ -1,5 +1,6 @@
 const userTracks = require("./getUserTracks");
 const userId = require("./functions");
+const comparedTracks = require("./text");
 var user1Tracks;
 var user2Tracks;
 var similarTracks = [];
@@ -10,8 +11,18 @@ function isSimilar(track1, track2) {
     return true;
   }
 
+  if (!comparedTracks.match(track1.name, track2.name)) {
+    return false;
+  } 
+
+  for (var i = 0; i < track1.album.artists.length; i++) {
+    for (var j = 0; j < track2.album.artists.length; j++) {
+      if (track1.album.artists[i].id === track2.album.artists[j].id || comparedTracks.match(track1.album.artists[i].name, track2.album.artists[j].name)) {
+        return true;
+      }
+    }
+  }
   return false;
-  // if (track1.artist )
 }
 
 function compareUserTracks() {
@@ -27,10 +38,10 @@ function compareUserTracks() {
 
   console.log(
     similarTracks.map(
-      track =>
-        track.name + " - " + track.album.name + " - " + track.album.artists[0].name
+      track => track.name + " - " + track.album.name + " - " + track.album.artists[0].name
     )
   );
+
   console.log(similarTracks.length);
 }
 

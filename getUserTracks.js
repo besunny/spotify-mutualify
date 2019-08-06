@@ -61,7 +61,7 @@ function getAllTracks(playlists, callback, allTracks = [], index = 0) {
         console.log('Tracks of Playlist '+index+' Loaded')
         index ++;
         if ( index !== playlists.length ) {
-            getAllTracks(playlists, callback, allTracks, index )
+            getAllTracks(playlists, callback, allTracks, index)
         } else {
             callback(allTracks);
         }
